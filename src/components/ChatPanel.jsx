@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 import ChatMessage from './ChatMessage'
 import PromptChips from './PromptChips'
+import { API_ENDPOINTS } from '../config/api'
 import './ChatPanel.css'
 
 function ChatPanel({ selectedDomain, dateRange, onDateRangeChange }) {
@@ -44,7 +45,7 @@ function ChatPanel({ selectedDomain, dateRange, onDateRangeChange }) {
     setIsLoading(true)
 
     try {
-      const response = await fetch('/api/chat', {
+      const response = await fetch(API_ENDPOINTS.CHAT, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 

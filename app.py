@@ -1,17 +1,23 @@
 from flask import Flask, render_template, request, jsonify
+from flask_cors import CORS
+from dotenv import load_dotenv
+import os
 from services.news_service import fetch_news
 from services.rag_service import rag
 from services.llm_service import ask_gemini
 from services.nlp_service import analyze_sentiment
 
+load_dotenv()
+
 app = Flask(__name__)
+CORS(app)
 
 @app.route("/")
 def home():
     return render_template("index.html")
 
 
-@app.route("/news", methods=["GET"])
+@app.route("/api/news", methods=["GET"])
 def get_news():
     domain = request.args.get("domain")
 
@@ -33,7 +39,7 @@ def get_news():
     return jsonify(enriched)
 
 
-@app.route("/chat", methods=["POST"])
+@app.route("/api/chat", methods=["POST"])
 def chat():
     data = request.json
     domain = data["domain"]
@@ -61,5 +67,11 @@ def chat():
     return jsonify({"response": response})
 
 
+@app.route("/api/health", methods=["GET"])
+def health():
+    return jsonify({"status": "ok"})
+
+
 if __name__ == "__main__":
-    app.run(debug=True)
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port)

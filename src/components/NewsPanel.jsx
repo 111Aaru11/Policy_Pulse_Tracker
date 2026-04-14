@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import NewsCard from './NewsCard'
+import { API_ENDPOINTS } from '../config/api'
 import './NewsPanel.css'
 
 function NewsPanel({ selectedDomain, searchQuery }) {
@@ -13,7 +14,7 @@ function NewsPanel({ selectedDomain, searchQuery }) {
   const fetchNews = async (domain) => {
     setLoading(true)
     try {
-      const response = await fetch(`/api/news?domain=${domain}`)
+      const response = await fetch(`${API_ENDPOINTS.NEWS}?domain=${domain}`)
       const data = await response.json()
       
       const formattedNews = data.map(item => ({
