@@ -2,15 +2,29 @@ from flask import Flask, render_template, request, jsonify
 from flask_cors import CORS
 from dotenv import load_dotenv
 import os
-from services.news_service import fetch_news
-from services.rag_service import rag
-from services.llm_service import ask_gemini
-from services.nlp_service import analyze_sentiment
 
 load_dotenv()
 
 app = Flask(__name__)
 CORS(app)
+
+# Lazy-load services to prevent startup timeout
+fetch_news = None
+rag = None
+ask_gemini = None
+analyze_sentiment = None
+
+def load_services():
+    global fetch_news, rag, ask_gemini, analyze_sentiment
+    if fetch_news is None:
+        from services.news_service import fetch_news as fn
+        from services.rag_service import rag as r
+        from services.llm_service import ask_gemini as ag
+        from services.nlp_service import analyze_sentiment as as_
+        fetch_news = fn
+        rag = r
+        ask_gemini = ag
+        analyze_sentiment = as_
 
 @app.route("/")
 def home():
@@ -19,6 +33,7 @@ def home():
 
 @app.route("/api/news", methods=["GET"])
 def get_news():
+    load_services()
     domain = request.args.get("domain")
 
     articles = fetch_news(domain)
@@ -41,6 +56,7 @@ def get_news():
 
 @app.route("/api/chat", methods=["POST"])
 def chat():
+    load_services()
     data = request.json
     domain = data["domain"]
     year = data["year"]
@@ -70,6 +86,7 @@ def chat():
 @app.route("/api/health", methods=["GET"])
 def health():
     return jsonify({"status": "ok"})
+
 
 
 if __name__ == "__main__":
