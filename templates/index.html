@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Policy Pulse AI - Government Policy Intelligence</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', 'Segoe UI', sans-serif;
+      background: #0a0e27;
+      color: #e2e8f0;
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, 
+        #0f172a 0%, 
+        #1a1f3a 15%,
+        #2d1b69 30%,
+        #0f172a 45%,
+        #1a1f3a 60%,
+        #0d2b3e 75%,
+        #0f172a 100%);
+      background-size: 400% 400%;
+      animation: gradientShift 20s ease infinite;
+      z-index: -2;
+    }
+
+    body::after {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: 
+        radial-gradient(circle at 20% 50%, rgba(139, 92, 246, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(236, 72, 153, 0.12) 0%, transparent 50%),
+        radial-gradient(circle at 40% 0%, rgba(59, 130, 246, 0.15) 0%, transparent 50%);
+      animation: floatGlow 15s ease-in-out infinite;
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    @keyframes gradientShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    @keyframes floatGlow {
+      0%, 100% {
+        opacity: 0.5;
+        transform: translate(0, 0);
+      }
+      25% {
+        opacity: 0.8;
+        transform: translate(10px, -20px);
+      }
+      50% {
+        opacity: 0.5;
+        transform: translate(-10px, 10px);
+      }
+      75% {
+        opacity: 0.7;
+        transform: translate(5px, 15px);
+      }
+    }
+
+    header {
+      background: linear-gradient(135deg, rgba(15, 23, 42, 0.85) 0%, rgba(45, 27, 105, 0.6) 50%, rgba(15, 23, 42, 0.85) 100%);
+      color: white;
+      padding: 4rem 2rem;
+      text-align: center;
+      border-bottom: 1px solid rgba(139, 92, 246, 0.2);
+      backdrop-filter: blur(20px);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 10px 40px rgba(139, 92, 246, 0.1);
+    }
+
+    header h1 {
+      font-family: 'Poppins', sans-serif;
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      background: linear-gradient(135deg, #60a5fa 0%, #ec4899 50%, #a78bfa 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      letter-spacing: -1px;
+      animation: textGlow 3s ease-in-out infinite;
+    }
+
+    @keyframes textGlow {
+      0%, 100% {
+        filter: drop-shadow(0 0 10px rgba(96, 165, 250, 0.3));
+      }
+      50% {
+        filter: drop-shadow(0 0 20px rgba(236, 72, 153, 0.4));
+      }
+    }
+
+    header p {
+      font-size: 1rem;
+      color: #94a3b8;
+      font-weight: 300;
+      letter-spacing: 0.5px;
+    }
+
+    nav {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      padding: 2rem 1rem;
+      flex-wrap: wrap;
+      background: linear-gradient(180deg, rgba(15, 23, 42, 0.9) 0%, rgba(45, 27, 105, 0.3) 100%);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(139, 92, 246, 0.1);
+    }
+
+    nav button {
+      background: rgba(45, 27, 105, 0.4);
+      border: 1.5px solid rgba(139, 92, 246, 0.3);
+      color: #cbd5e1;
+      padding: 0.75rem 1.5rem;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      font-family: 'Poppins', sans-serif;
+      font-weight: 500;
+      font-size: 0.95rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    nav button::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, #ec4899, #8b5cf6, #3b82f6);
+      transition: left 0.4s ease;
+      z-index: -1;
+    }
+
+    nav button:hover {
+      color: white;
+      border-color: #ec4899;
+      transform: translateY(-2px);
+      box-shadow: 0 15px 35px rgba(236, 72, 153, 0.3);
+    }
+
+    nav button:hover::before {
+      left: 0;
+    }
+
+    .section {
+      background: linear-gradient(135deg, rgba(45, 27, 105, 0.4) 0%, rgba(30, 41, 59, 0.3) 50%, rgba(15, 23, 42, 0.4) 100%);
+      backdrop-filter: blur(20px);
+      width: 90%;
+      max-width: 1200px;
+      margin: 2rem auto;
+      padding: 2.5rem;
+      border-radius: 20px;
+      border: 1.5px solid rgba(139, 92, 246, 0.2);
+      box-shadow: 0 20px 60px rgba(139, 92, 246, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+      animation: slideIn 0.6s ease-out, floatSection 6s ease-in-out infinite;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .section::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -50%;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle, rgba(236, 72, 153, 0.1) 0%, transparent 70%);
+      animation: rotate 20s linear infinite;
+      pointer-events: none;
+    }
+
+    @keyframes rotate {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    @keyframes floatSection {
+      0%, 100% {
+        transform: translateY(0px);
+      }
+      50% {
+        transform: translateY(-10px);
+      }
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 2px solid rgba(139, 92, 246, 0.2);
+    }
+
+    .section-header i {
+      font-size: 1.5rem;
+      background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 50%, #3b82f6 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: iconPulse 2s ease-in-out infinite;
+    }
+
+    @keyframes iconPulse {
+      0%, 100% { filter: drop-shadow(0 0 8px rgba(139, 92, 246, 0.3)); }
+      50% { filter: drop-shadow(0 0 15px rgba(236, 72, 153, 0.5)); }
+    }
+
+    .section-header h2 {
+      font-family: 'Poppins', sans-serif;
+      font-size: 1.8rem;
+      font-weight: 600;
+      margin: 0;
+      color: #f0f4f8;
+    }
+
+    .section-header span {
+      background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 50%, #3b82f6 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      font-weight: 700;
+    }
+
+    .news-item {
+      background: linear-gradient(135deg, rgba(51, 65, 85, 0.2) 0%, rgba(45, 27, 105, 0.15) 100%);
+      padding: 1.5rem;
+      border-radius: 15px;
+      border: 1px solid rgba(139, 92, 246, 0.15);
+      margin-bottom: 1.5rem;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .news-item::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(236, 72, 153, 0.1), transparent);
+      transition: left 0.6s ease;
+    }
+
+    .news-item:hover::before {
+      left: 100%;
+    }
+
+    .news-item:hover {
+      background: linear-gradient(135deg, rgba(96, 165, 250, 0.15) 0%, rgba(236, 72, 153, 0.1) 100%);
+      border-color: rgba(236, 72, 153, 0.4);
+      transform: translateX(5px);
+      box-shadow: 0 15px 40px rgba(236, 72, 153, 0.15);
+    }
+
+    .news-item p {
+      margin: 0.5rem 0;
+      line-height: 1.6;
+      color: #e0e7ff;
+    }
+
+    .news-item strong {
+      color: #f0f4f8;
+      font-weight: 600;
+    }
+
+    .sentiment-badge {
+      display: inline-block;
+      padding: 0.5rem 1rem;
+      border-radius: 50px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-top: 0.75rem;
+      backdrop-filter: blur(10px);
+      transition: all 0.3s ease;
+    }
+
+    .sentiment-POSITIVE {
+      background: linear-gradient(135deg, rgba(34, 197, 94, 0.25) 0%, rgba(34, 197, 94, 0.15) 100%);
+      color: #86efac;
+      border: 1px solid rgba(34, 197, 94, 0.4);
+      box-shadow: 0 0 15px rgba(34, 197, 94, 0.15);
+    }
+
+    .sentiment-POSITIVE:hover {
+      box-shadow: 0 0 25px rgba(34, 197, 94, 0.3);
+    }
+
+    .sentiment-NEGATIVE {
+      background: linear-gradient(135deg, rgba(239, 68, 68, 0.25) 0%, rgba(239, 68, 68, 0.15) 100%);
+      color: #fca5a5;
+      border: 1px solid rgba(239, 68, 68, 0.4);
+      box-shadow: 0 0 15px rgba(239, 68, 68, 0.15);
+    }
+
+    .sentiment-NEGATIVE:hover {
+      box-shadow: 0 0 25px rgba(239, 68, 68, 0.3);
+    }
+
+    .sentiment-NEUTRAL {
+      background: linear-gradient(135deg, rgba(139, 92, 246, 0.25) 0%, rgba(139, 92, 246, 0.15) 100%);
+      color: #d8b4fe;
+      border: 1px solid rgba(139, 92, 246, 0.4);
+      box-shadow: 0 0 15px rgba(139, 92, 246, 0.15);
+    }
+
+    .sentiment-NEUTRAL:hover {
+      box-shadow: 0 0 25px rgba(139, 92, 246, 0.3);
+    }
+
+    .chat-section {
+      display: flex;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .chat-inputs {
+      flex: 1;
+      min-width: 300px;
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      color: #c0c5d0;
+      font-weight: 500;
+      font-size: 0.9rem;
+      background: linear-gradient(135deg, #cbd5e1 0%, #a78bfa 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      background: rgba(45, 27, 105, 0.3);
+      border: 1.5px solid rgba(139, 92, 246, 0.25);
+      border-radius: 12px;
+      color: #e2e8f0;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.95rem;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    input:focus, select:focus {
+      outline: none;
+      background: rgba(45, 27, 105, 0.5);
+      border-color: #ec4899;
+      box-shadow: 0 0 0 3px rgba(236, 72, 153, 0.15), inset 0 0 20px rgba(236, 72, 153, 0.05);
+    }
+
+    input::placeholder {
+      color: #64748b;
+    }
+
+    .submit-btn {
+      width: 100%;
+      padding: 0.9rem;
+      background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 50%, #3b82f6 100%);
+      background-size: 200% 200%;
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-family: 'Poppins', sans-serif;
+      font-weight: 600;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.4s ease;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 10px 35px rgba(236, 72, 153, 0.3);
+      animation: gradientShiftBtn 3s ease infinite;
+    }
+
+    @keyframes gradientShiftBtn {
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+    }
+
+    .submit-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 20px 50px rgba(236, 72, 153, 0.5);
+    }
+
+    .submit-btn:active {
+      transform: translateY(0);
+    }
+
+    .chat-output {
+      background: linear-gradient(135deg, rgba(45, 27, 105, 0.2) 0%, rgba(30, 41, 59, 0.15) 100%);
+      padding: 1.5rem;
+      border-radius: 15px;
+      border: 1px solid rgba(139, 92, 246, 0.15);
+      max-height: 400px;
+      overflow-y: auto;
+      flex: 1;
+      min-width: 300px;
+    }
+
+    .chat-output::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    .chat-output::-webkit-scrollbar-track {
+      background: rgba(45, 27, 105, 0.2);
+      border-radius: 10px;
+    }
+
+    .chat-output::-webkit-scrollbar-thumb {
+      background: linear-gradient(180deg, #ec4899, #8b5cf6, #3b82f6);
+      border-radius: 10px;
+      transition: all 0.3s ease;
+    }
+
+    .chat-output::-webkit-scrollbar-thumb:hover {
+      background: linear-gradient(180deg, #ec4899, #8b5cf6, #3b82f6);
+      box-shadow: 0 0 15px rgba(236, 72, 153, 0.3);
+    }
+
+    .message {
+      margin: 1rem 0;
+      padding: 1rem;
+      border-radius: 12px;
+      word-wrap: break-word;
+      animation: messageIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    @keyframes messageIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px) scale(0.95);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    .user {
+      background: linear-gradient(135deg, rgba(236, 72, 153, 0.8) 0%, rgba(139, 92, 246, 0.7) 100%);
+      color: white;
+      margin-left: auto;
+      width: fit-content;
+      max-width: 80%;
+      border: 1px solid rgba(236, 72, 153, 0.4);
+      font-weight: 500;
+      box-shadow: 0 10px 25px rgba(236, 72, 153, 0.2);
+    }
+
+    .bot {
+      background: linear-gradient(135deg, rgba(51, 65, 85, 0.6) 0%, rgba(45, 27, 105, 0.4) 100%);
+      color: #f0f4f8;
+      border: 1px solid rgba(139, 92, 246, 0.2);
+      width: fit-content;
+      max-width: 80%;
+      box-shadow: 0 10px 25px rgba(139, 92, 246, 0.1);
+    }
+
+    .main-container {
+      display: grid;
+      grid-template-columns: 1fr 1.2fr;
+      gap: 2rem;
+      width: 95%;
+      max-width: 1400px;
+      margin: 2rem auto;
+      align-items: start;
+    }
+
+    .news-section {
+      background: linear-gradient(135deg, rgba(45, 27, 105, 0.4) 0%, rgba(30, 41, 59, 0.3) 50%, rgba(15, 23, 42, 0.4) 100%);
+      backdrop-filter: blur(20px);
+      padding: 2.5rem;
+      border-radius: 20px;
+      border: 1.5px solid rgba(139, 92, 246, 0.2);
+      box-shadow: 0 20px 60px rgba(139, 92, 246, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+      animation: slideIn 0.6s ease-out, floatSection 6s ease-in-out infinite;
+      position: relative;
+      overflow: hidden;
+      max-height: 600px;
+      overflow-y: auto;
+    }
+
+    .news-section::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    .news-section::-webkit-scrollbar-track {
+      background: rgba(45, 27, 105, 0.2);
+      border-radius: 10px;
+    }
+
+    .news-section::-webkit-scrollbar-thumb {
+      background: linear-gradient(180deg, #ec4899, #8b5cf6, #3b82f6);
+      border-radius: 10px;
+    }
+
+    .chat-container {
+      background: linear-gradient(135deg, rgba(45, 27, 105, 0.4) 0%, rgba(30, 41, 59, 0.3) 50%, rgba(15, 23, 42, 0.4) 100%);
+      backdrop-filter: blur(20px);
+      padding: 2.5rem;
+      border-radius: 20px;
+      border: 1.5px solid rgba(139, 92, 246, 0.2);
+      box-shadow: 0 20px 60px rgba(139, 92, 246, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+      animation: slideIn 0.6s ease-out 0.2s both, floatSection 6s ease-in-out infinite;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .chat-header-with-avatar {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 2px solid rgba(139, 92, 246, 0.2);
+    }
+
+    .chatbot-avatar {
+      width: 80px;
+      height: 80px;
+      background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 50%, #3b82f6 100%);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.5rem;
+      box-shadow: 0 10px 30px rgba(236, 72, 153, 0.3);
+      animation: avatarBob 3s ease-in-out infinite;
+      flex-shrink: 0;
+    }
+
+    @keyframes avatarBob {
+      0%, 100% {
+        transform: translateY(0px);
+      }
+      50% {
+        transform: translateY(-8px);
+      }
+    }
+
+    .chat-header-text h2 {
+      font-family: 'Poppins', sans-serif;
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin: 0 0 0.5rem 0;
+      color: #f0f4f8;
+    }
+
+    .chat-header-text p {
+      margin: 0;
+      color: #94a3b8;
+      font-size: 0.9rem;
+    }
+
+    .chat-section {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      flex-grow: 1;
+    }
+
+    .chat-inputs {
+      flex: 0;
+      min-width: 100%;
+    }
+
+    .chat-output {
+      flex: 1;
+      min-height: 300px;
+    }
+
+    @media (max-width: 1024px) {
+      .main-container {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <h1><i class="fas fa-chart-line"></i> Policy Pulse AI</h1>
+  <p>Government Policy Intelligence & Analysis Platform 🇮🇳</p>
+</header>
+
+<nav>
+  <button onclick="selectDepartment('Health')"><i class="fas fa-heartbeat"></i> Health</button>
+  <button onclick="selectDepartment('Education')"><i class="fas fa-book"></i> Education</button>
+  <button onclick="selectDepartment('Finance')"><i class="fas fa-money-bill-wave"></i> Finance</button>
+</nav>
+
+<div class="main-container">
+  <!-- Left Side: Latest News -->
+  <div class="news-section">
+    <div class="section-header">
+      <i class="fas fa-newspaper"></i>
+      <h2>Latest News - <span id="selected-domain">Health</span></h2>
+    </div>
+    <div id="news-list">Loading...</div>
+  </div>
+
+  <!-- Right Side: AI Chatbot -->
+  <div class="chat-container">
+    <div class="chat-header-with-avatar">
+      <div class="chatbot-avatar">🤖</div>
+      <div class="chat-header-text">
+        <h2>AI Policy Assistant</h2>
+        <p>Ask anything about policies</p>
+      </div>
+    </div>
+
+    <div class="chat-section">
+      <div class="chat-inputs">
+        <div class="form-group">
+          <label for="domain-input"><i class="fas fa-folder"></i> Select Domain</label>
+          <select id="domain-input">
+            <option value="Health">🏥 Health</option>
+            <option value="Education">📚 Education</option>
+            <option value="Finance">💰 Finance</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="year-input"><i class="fas fa-calendar"></i> Enter Year</label>
+          <input type="number" id="year-input" placeholder="e.g., 2024" />
+        </div>
+
+        <button class="submit-btn" onclick="sendMessage()"><i class="fas fa-paper-plane"></i> Ask AI</button>
+      </div>
+
+      <div class="chat-output" id="chat-output"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+
+  const newsList = document.getElementById('news-list');
+  const chatOutput = document.getElementById('chat-output');
+  const domainInput = document.getElementById('domain-input');
+
+  function selectDepartment(dept) {
+    document.getElementById('selected-domain').innerText = dept;
+    domainInput.value = dept;
+    fetchNews(dept);
+  }
+
+  async function fetchNews(domain) {
+    newsList.innerHTML = '<div style="text-align: center; color: #94a3b8;"><i class="fas fa-spinner fa-spin"></i> Loading news...</div>';
+
+    try {
+      const res = await fetch(`http://127.0.0.1:5000/news?domain=${domain}`);
+      const data = await res.json();
+
+      newsList.innerHTML = "";
+
+      if (data.length === 0) {
+        newsList.innerHTML = '<p style="color: #94a3b8; text-align: center;">No news available</p>';
+        return;
+      }
+
+      data.forEach((item, index) => {
+        const div = document.createElement("div");
+        div.className = "news-item";
+        
+        const sentiment = item.sentiment[0].label || 'NEUTRAL';
+        const sentimentScore = item.sentiment[0].score || 0;
+
+        div.innerHTML = `
+          <p><strong>${item.text}</strong></p>
+          <div style="display: flex; align-items: center; gap: 1rem; margin-top: 1rem;">
+            <span class="sentiment-badge sentiment-${sentiment}">
+              <i class="fas fa-${sentiment === 'POSITIVE' ? 'thumbs-up' : sentiment === 'NEGATIVE' ? 'thumbs-down' : 'minus'}"></i>
+              ${sentiment} (${(sentimentScore * 100).toFixed(1)}%)
+            </span>
+          </div>
+        `;
+
+        newsList.appendChild(div);
+      });
+
+    } catch (err) {
+      newsList.innerHTML = '<p style="color: #fca5a5;"><i class="fas fa-exclamation-circle"></i> Error connecting to backend</p>';
+    }
+  }
+
+  async function sendMessage() {
+    const domain = domainInput.value;
+    const year = document.getElementById('year-input').value;
+
+    if (!year) {
+      alert("Please enter a year");
+      return;
+    }
+
+    const userMsg = document.createElement("div");
+    userMsg.className = "message user";
+    userMsg.innerHTML = `<strong>You:</strong> ${domain} policies in ${year}`;
+    chatOutput.appendChild(userMsg);
+    chatOutput.scrollTop = chatOutput.scrollHeight;
+
+    try {
+      const res = await fetch("http://127.0.0.1:5000/chat", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ domain, year })
+      });
+
+      const data = await res.json();
+
+      const botMsg = document.createElement("div");
+      botMsg.className = "message bot";
+      botMsg.innerHTML = `<strong>Policy AI:</strong> ${data.response}`;
+
+      chatOutput.appendChild(botMsg);
+      chatOutput.scrollTop = chatOutput.scrollHeight;
+
+    } catch (err) {
+      const errorMsg = document.createElement("div");
+      errorMsg.className = "message bot";
+      errorMsg.innerHTML = `<strong>Policy AI:</strong> <i class="fas fa-exclamation-circle"></i> Unable to process request. Please ensure backend is running.`;
+      chatOutput.appendChild(errorMsg);
+      chatOutput.scrollTop = chatOutput.scrollHeight;
+    }
+  }
+
+  // default load
+  selectDepartment("Health");
+
+</script>
+
+</body>
+</html>

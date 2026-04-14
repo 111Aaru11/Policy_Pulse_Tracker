@@ -1,0 +1,66 @@
+.prompt-chips {
+  margin-bottom: 1.5rem;
+}
+
+.chips-label {
+  font-size: 0.85rem;
+  color: #94a3b8;
+  margin: 0 0 0.75rem 0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-weight: 600;
+}
+
+.chips-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.prompt-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1rem;
+  background: linear-gradient(135deg, rgba(45, 27, 105, 0.4) 0%, rgba(30, 41, 59, 0.3) 100%);
+  border: 1.5px solid rgba(139, 92, 246, 0.2);
+  border-radius: 50px;
+  color: #cbd5e1;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  font-size: 0.85rem;
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
+}
+
+.prompt-chip i {
+  font-size: 0.9rem;
+  color: #ec4899;
+}
+
+.prompt-chip:hover {
+  background: linear-gradient(135deg, rgba(236, 72, 153, 0.2) 0%, rgba(139, 92, 246, 0.2) 100%);
+  border-color: #ec4899;
+  color: #f0f4f8;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(236, 72, 153, 0.1);
+}
+
+.prompt-chip:active {
+  transform: translateY(0);
+}
+
+@media (max-width: 768px) {
+  .chips-container {
+    gap: 0.5rem;
+  }
+
+  .prompt-chip {
+    padding: 0.5rem 0.8rem;
+    font-size: 0.8rem;
+  }
+
+  .prompt-chip i {
+    font-size: 0.8rem;
+  }
+}
