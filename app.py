@@ -33,54 +33,60 @@ def home():
 
 @app.route("/api/news", methods=["GET"])
 def get_news():
-    load_services()
-    domain = request.args.get("domain")
+    try:
+        load_services()
+        domain = request.args.get("domain")
 
-    articles = fetch_news(domain)
+        articles = fetch_news(domain)
 
-    # Store in RAG
-    texts = [a["title"] + " " + (a["description"] or "") for a in articles]
-    rag.add_documents(texts)
+        # Store in RAG
+        texts = [a["title"] + " " + (a["description"] or "") for a in articles]
+        rag.add_documents(texts)
 
-    # Add sentiment
-    enriched = []
-    for t in texts:
-        sentiment = analyze_sentiment(t)
-        enriched.append({
-            "text": t,
-            "sentiment": sentiment
-        })
+        # Add sentiment
+        enriched = []
+        for t in texts:
+            sentiment = analyze_sentiment(t)
+            enriched.append({
+                "text": t,
+                "sentiment": sentiment
+            })
 
-    return jsonify(enriched)
+        return jsonify(enriched)
+    except Exception as e:
+        return jsonify({"error": str(e), "type": type(e).__name__}), 500
 
 
 @app.route("/api/chat", methods=["POST"])
 def chat():
-    load_services()
-    data = request.json
-    domain = data["domain"]
-    year = data["year"]
+    try:
+        load_services()
+        data = request.json
+        domain = data["domain"]
+        year = data["year"]
 
-    query = f"{domain} policies in India {year}"
+        query = f"{domain} policies in India {year}"
 
-    # 🔥 RAG retrieval
-    context = rag.search(query)
+        # 🔥 RAG retrieval
+        context = rag.search(query)
 
-    prompt = f"""
-    You are an AI Policy Analyst.
+        prompt = f"""
+        You are an AI Policy Analyst.
 
-    Context:
-    {context}
+        Context:
+        {context}
 
-    Question:
-    List policies in {domain} for {year} in India.
+        Question:
+        List policies in {domain} for {year} in India.
 
-    Answer in bullet points.
-    """
+        Answer in bullet points.
+        """
 
-    response = ask_gemini(prompt)
+        response = ask_gemini(prompt)
 
-    return jsonify({"response": response})
+        return jsonify({"response": response})
+    except Exception as e:
+        return jsonify({"error": str(e), "type": type(e).__name__}), 500
 
 
 @app.route("/api/health", methods=["GET"])
