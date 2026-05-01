@@ -58,16 +58,18 @@ def get_news():
 def chat():
     try:
         data = request.json or {}
-        domain = data.get("domain", "Health")
-        year = data.get("year", 2026)
-        query = data.get("query", "")
+        domain = str(data.get("domain", "Health"))
+        year = int(data.get("year", 2026))
+        query = str(data.get("query", ""))
         
         # Return helpful response
         response_text = f"I'm your AI Policy Assistant for {domain}. You asked: '{query}' for {year}. Based on current policy information, I can help you understand key initiatives, reforms, and government programs in the {domain} sector."
         
-        return jsonify({"response": response_text})
+        result = {"response": str(response_text)}
+        return jsonify(result)
     except Exception as e:
-        return jsonify({"response": "I'm your AI Policy Assistant. How can I help you with government policies?"}), 200
+        error_response = {"response": "I'm your AI Policy Assistant. How can I help you with government policies?"}
+        return jsonify(error_response), 200
 
 @app.route("/api/health", methods=["GET"])
 def health():
