@@ -17,6 +17,9 @@ function NewsPanel({ selectedDomain, searchQuery }) {
       const response = await fetch(`${API_ENDPOINTS.NEWS}?domain=${domain}`)
       const data = await response.json()
       
+      console.log('API Response:', data)
+      console.log('API Endpoint:', `${API_ENDPOINTS.NEWS}?domain=${domain}`)
+      
       const formattedNews = data.map(item => ({
         title: item.title || 'Policy Update',
         description: item.description || 'No description available',
@@ -28,6 +31,7 @@ function NewsPanel({ selectedDomain, searchQuery }) {
         thumbnail: item.thumbnail || null
       }))
       
+      console.log('Formatted News:', formattedNews)
       setNewsList(formattedNews)
     } catch (error) {
       console.error('Error fetching news:', error)
