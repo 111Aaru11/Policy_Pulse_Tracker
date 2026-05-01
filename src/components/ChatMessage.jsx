@@ -4,13 +4,15 @@ import './ChatMessage.css'
 function ChatMessage({ message, isUser }) {
   const [displayedText, setDisplayedText] = React.useState('')
   const [isTyping, setIsTyping] = React.useState(!isUser)
+  
+  const messageText = message?.text || 'No response available'
 
   React.useEffect(() => {
     if (!isUser && isTyping) {
       let index = 0
       const timer = setInterval(() => {
-        if (index < message.text.length) {
-          setDisplayedText(prev => prev + message.text[index])
+        if (index < messageText.length) {
+          setDisplayedText(prev => prev + messageText[index])
           index++
         } else {
           setIsTyping(false)
@@ -18,9 +20,9 @@ function ChatMessage({ message, isUser }) {
       }, 20) // Typing speed
       return () => clearInterval(timer)
     } else {
-      setDisplayedText(message.text)
+      setDisplayedText(messageText)
     }
-  }, [message, isUser])
+  }, [message, isUser, messageText])
 
   return (
     <div className={`chat-message ${isUser ? 'user' : 'bot'} animate-message-in`}>
