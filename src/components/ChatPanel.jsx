@@ -56,9 +56,12 @@ function ChatPanel({ selectedDomain, dateRange, onDateRangeChange }) {
       })
 
       const data = await response.json()
+      
+      console.log('Chat API Response:', data)
+      console.log('Response Text:', data.response)
 
       const botMessage = {
-        text: data.response || 'Sorry, I couldn\'t process that request. Please try again.',
+        text: data.response && typeof data.response === 'string' ? data.response : 'I am your AI Policy Assistant. How can I help you with government policies?',
         isUser: false
       }
 
