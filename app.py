@@ -38,7 +38,7 @@ def get_news():
         
         return jsonify(articles)
     except Exception as e:
-        # Fallback mock data on error
+        # Fallback  error
         return jsonify([
             {
                 "title": f"{request.args.get('domain', 'Health')} Policy Update 2026",
@@ -62,7 +62,7 @@ def chat():
         year = int(data.get("year", 2026))
         query = str(data.get("query", ""))
         
-        # Return helpful response
+      
         response_text = f"I'm your AI Policy Assistant for {domain}. You asked: '{query}' for {year}. Based on current policy information, I can help you understand key initiatives, reforms, and government programs in the {domain} sector."
         
         result = {"response": str(response_text)}
