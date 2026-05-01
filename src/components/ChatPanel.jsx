@@ -55,13 +55,24 @@ function ChatPanel({ selectedDomain, dateRange, onDateRangeChange }) {
         })
       })
 
+      if (!response.ok) {
+        throw new Error(`API Error: ${response.status}`)
+      }
+
       const data = await response.json()
       
       console.log('Chat API Response:', data)
       console.log('Response Text:', data.response)
+      console.log('Response Type:', typeof data.response)
+
+      let botResponse = 'I am your AI Policy Assistant. How can I help you with government policies?'
+      
+      if (data && data.response) {
+        botResponse = String(data.response)
+      }
 
       const botMessage = {
-        text: data.response && typeof data.response === 'string' ? data.response : 'I am your AI Policy Assistant. How can I help you with government policies?',
+        text: botResponse,
         isUser: false
       }
 
