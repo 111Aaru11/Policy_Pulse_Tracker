@@ -42,7 +42,7 @@ function NewsPanel({ selectedDomain, searchQuery }) {
   }
 
   const filteredNews = newsList.filter(news =>
-    news.text && searchQuery && news.text.toLowerCase().includes(searchQuery.toLowerCase())
+    !searchQuery || (news.text && news.text.toLowerCase().includes(searchQuery.toLowerCase()))
   )
 
   return (
