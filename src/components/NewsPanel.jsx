@@ -18,9 +18,11 @@ function NewsPanel({ selectedDomain, searchQuery }) {
       const data = await response.json()
       
       const formattedNews = data.map(item => ({
-        text: item.text,
-        sentiment: item.sentiment[0]?.label || 'NEUTRAL',
-        score: item.sentiment[0]?.score || 0.5,
+        title: item.title || 'Policy Update',
+        description: item.description || 'No description available',
+        text: item.title || 'Policy Update',
+        sentiment: item.sentiment && item.sentiment[0] ? item.sentiment[0].label : 'NEUTRAL',
+        score: item.sentiment && item.sentiment[0] ? item.sentiment[0].score : 0.5,
         source: item.source || 'News',
         date: item.date || new Date(),
         thumbnail: item.thumbnail || null
@@ -36,7 +38,7 @@ function NewsPanel({ selectedDomain, searchQuery }) {
   }
 
   const filteredNews = newsList.filter(news =>
-    news.text.toLowerCase().includes(searchQuery.toLowerCase())
+    news.text && searchQuery && news.text.toLowerCase().includes(searchQuery.toLowerCase())
   )
 
   return (
